@@ -26,8 +26,8 @@ def play_song_for_user(user_info, data):
     outputs.append([data['channel'], aaja_msg.format(firstname)])
     mp3_path="file:///home/pi/" + username + ".mp3"
     print "Playing: " + mp3_path
-#   p = vlc.MediaPlayer(mp3_path)
-#   p.play()
+    p = vlc.MediaPlayer(mp3_path)
+    p.play()
     
 
 def process_message(data):
