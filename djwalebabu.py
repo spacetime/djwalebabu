@@ -10,7 +10,6 @@ crontable = []
 outputs = []
 aaja_msg="Aaja {} Aaja. Tera gaana bajadun."
 
-vlc_player = None
 
 def should_play(msg):
     try:
@@ -41,13 +40,15 @@ def play_song_for_user(user_info, data):
     print "Playing: " + mp3_path
     vlc_player = vlc.MediaPlayer(mp3_path)
     vlc_player.play()
+    return vlc_player
 
 
 def process_message(data):
     print data #logging aint working??
     sc = SlackClient(config['SLACK_TOKEN'])
     user_info = sc.api_call("users.info", user=data['user'])
+    vlc_player = None
     if should_play(data['text']):
-        play_song_for_user(user_info, data)
-    if should_stop(data['text']):
+        vlc_player = play_song_for_user(user_info, data)
+    if should_stop(data['text']) and vlc_player is not None:
         vlc_player.stop()
