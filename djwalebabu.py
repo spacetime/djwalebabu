@@ -27,7 +27,7 @@ def play_song_for_user(user_info, data):
 
     outputs.append([data['channel'], aaja_msg.format(firstname)])
     mp3_path="file:///home/pi/" + username + ".mp3"
-    if not os.path.isfile(fname):
+    if not os.path.isfile(mp3_path):
         mp3_path="file:///home/pi/" + "default.mp3"
     print "Playing: " + mp3_path
     p = vlc.MediaPlayer(mp3_path)
