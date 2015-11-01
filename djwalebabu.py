@@ -10,9 +10,18 @@ crontable = []
 outputs = []
 aaja_msg="Aaja {} Aaja. Tera gaana bajadun."
 
+vlc_player = None
+
 def should_play(msg):
     try:
         found = len(re.search('(mera+ ga+na+ baj+a+ ?do+)', msg.lower()).group(1)) > 0
+    except:
+        found = False
+    return found
+
+def should_stop(msg):
+    try:
+        found = len(re.search('(chup karo?)', msg.lower()).group(1)) > 0
     except:
         found = False
     return found
@@ -30,8 +39,8 @@ def play_song_for_user(user_info, data):
     if not os.path.isfile(mp3_path):
         mp3_path="file:///home/pi/" + "default.mp3"
     print "Playing: " + mp3_path
-    p = vlc.MediaPlayer(mp3_path)
-    p.play()
+    vlc_player = vlc.MediaPlayer(mp3_path)
+    vlc_player.play()
 
 
 def process_message(data):
@@ -40,4 +49,5 @@ def process_message(data):
     user_info = sc.api_call("users.info", user=data['user'])
     if should_play(data['text']):
         play_song_for_user(user_info, data)
-
+    if should_stop(data['text']):
+        vlc_player.stop()
