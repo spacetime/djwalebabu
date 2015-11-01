@@ -4,6 +4,7 @@ from slackclient import SlackClient
 import json
 import re
 import logging
+import os.path
 
 crontable = []
 outputs = []
@@ -23,12 +24,15 @@ def play_song_for_user(user_info, data):
         if len(parsed_json['user']['profile']['first_name']) > 0:
             firstname = parsed_json['user']['profile']['first_name']
     username = parsed_json['user']['name']
+
     outputs.append([data['channel'], aaja_msg.format(firstname)])
     mp3_path="file:///home/pi/" + username + ".mp3"
+    if not os.path.isfile(fname):
+        mp3_path="file:///home/pi/" + "default.mp3"
     print "Playing: " + mp3_path
     p = vlc.MediaPlayer(mp3_path)
     p.play()
-    
+
 
 def process_message(data):
     print data #logging aint working??
