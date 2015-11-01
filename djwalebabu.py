@@ -13,6 +13,8 @@ class DjWaleBabu:
     aaja_msg = "Aaja {} Aaja. Tera gaana bajadun."
     not_playing = "Baby, gaana bajaane to de"
     stop_playback = "Toot gaya sandal?"
+    already_playing = "Firse bajadun?"
+
     vlc_player = None
 
     def can_play(self, msg):
@@ -30,6 +32,9 @@ class DjWaleBabu:
         return found
 
     def play_song_for_user(self, user_info, data):
+        if self.vlc_player is not None and self.vlc_player.is_playing():
+            outputs.append([data['channel'], self.already_playing])
+            return
         parsed_json = json.loads(user_info)
         firstname = parsed_json['user']['name']
         if 'first_name' in parsed_json['user']['profile']:
